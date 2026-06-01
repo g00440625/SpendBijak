@@ -1,13 +1,13 @@
-package com.helene.FinWise;
+package com.helene.spendbijak;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FinWiseApplication {
+public class SpendBijakApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FinWiseApplication.class, args);
+		SpringApplication.run(SpendBijakApplication.class, args);
 	}
 
 }
