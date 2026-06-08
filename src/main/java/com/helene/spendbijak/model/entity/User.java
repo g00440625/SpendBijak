@@ -1,4 +1,4 @@
-package com.helene.spendbijak.model;
+package com.helene.spendbijak.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 

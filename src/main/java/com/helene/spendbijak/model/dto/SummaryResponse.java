@@ -1,4 +1,4 @@
-package com.helene.spendbijak.model;
+package com.helene.spendbijak.model.dto;
 import lombok.Data;
 
 @Data

@@ -1,6 +1,6 @@
 package com.helene.spendbijak.service;
 
-import com.helene.spendbijak.model.User;
+import com.helene.spendbijak.model.entity.User;
 import com.helene.spendbijak.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;

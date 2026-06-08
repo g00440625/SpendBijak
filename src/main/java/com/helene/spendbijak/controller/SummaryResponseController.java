@@ -1,6 +1,6 @@
 package com.helene.spendbijak.controller;
 
-import com.helene.spendbijak.model.SummaryResponse;
+import com.helene.spendbijak.model.dto.SummaryResponse;
 import com.helene.spendbijak.service.SummaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

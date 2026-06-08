@@ -1,6 +1,6 @@
 package com.helene.spendbijak.repository;
 
-import com.helene.spendbijak.model.Expense;
+import com.helene.spendbijak.model.entity.Expense;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 

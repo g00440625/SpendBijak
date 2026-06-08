@@ -1,7 +1,7 @@
 package com.helene.spendbijak.service;
-import com.helene.spendbijak.model.Expense;
-import com.helene.spendbijak.model.SummaryResponse;
-import com.helene.spendbijak.model.User;
+import com.helene.spendbijak.model.entity.Expense;
+import com.helene.spendbijak.model.dto.SummaryResponse;
+import com.helene.spendbijak.model.entity.User;
 import com.helene.spendbijak.repository.ExpenseRepository;
 import com.helene.spendbijak.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
