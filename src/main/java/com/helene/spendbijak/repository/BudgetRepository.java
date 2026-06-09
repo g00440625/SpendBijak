@@ -1,0 +1,10 @@
+package com.helene.spendbijak.repository;
+
+import com.helene.spendbijak.model.entity.Budget;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface BudgetRepository extends JpaRepository<Budget, Long> {
+    List<Budget> findByUser_Id(Long userId);
+}
