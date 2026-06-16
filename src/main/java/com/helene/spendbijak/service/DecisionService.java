@@ -3,11 +3,16 @@ package com.helene.spendbijak.service;
 import com.helene.spendbijak.model.dto.DecisionRequest;
 import com.helene.spendbijak.model.dto.DecisionResponse;
 import com.helene.spendbijak.model.entity.Expense;
+import com.helene.spendbijak.model.entity.Goal;
 import com.helene.spendbijak.model.entity.User;
 import com.helene.spendbijak.repository.ExpenseRepository;
+import com.helene.spendbijak.repository.GoalRepository;
 import com.helene.spendbijak.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -15,12 +20,13 @@ import java.util.List;
 public class DecisionService {
     private final UserRepository userRepository;
     private final ExpenseRepository expenseRepository;
+    private final GoalRepository goalRepository;
 
     public DecisionResponse  getDecision(Long userId,DecisionRequest request) {
 
-
         User user = userRepository.findById(userId).orElseThrow();
         List<Expense> expenses = expenseRepository.findByUser_Id(userId);
+        List<Goal> goal = goalRepository.findByUser_Id(userId);
 
         // calculate total expense
         double totalSpent = 0.0;
@@ -82,7 +88,30 @@ public class DecisionService {
             savingsRateScore = 1; // very low
         }
         double debtScore = 0.0;
+
+        // calculate goal impact score to requested purchase
         double goalImpactScore = 0.0;
+        if (!goal.isEmpty()){
+           Goal mainGoal = goal.getFirst();
+
+           double remaining = mainGoal.getTargetAmount() - mainGoal.getCurrentAmount();
+
+           // how many months to reach the goal
+           long monthsLeft = ChronoUnit.MONTHS.between(LocalDate.now(), mainGoal.getTargetDate());
+
+           // required monthly savings
+           double requiredMonthly = remaining / monthsLeft;
+
+           // money user has left after purchase
+           double disposableAfterPurchase = user.getMonthlySalary() - monthlyExpenses - request.getPurchaseAmount();
+
+           if(disposableAfterPurchase < requiredMonthly){
+               goalImpactScore = 1.0 - (disposableAfterPurchase / requiredMonthly);
+
+               // keep the range within 0 and 1
+               goalImpactScore = Math.clamp(goalImpactScore, 0.0, 1.0);
+           }
+        }
 
         // full risk calculation
         double riskScore = (emergencyFundScore  * 0.30)
