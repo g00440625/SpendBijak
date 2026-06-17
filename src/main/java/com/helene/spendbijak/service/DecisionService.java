@@ -54,19 +54,19 @@ public class DecisionService {
         }
 
         // affordability score based on 50/30/20 rule
-        double purchaseToIncome = request.getPurchaseAmount()/user.getMonthlySalary();
+        double purchaseToRemainingIncome = request.getPurchaseAmount()/(user.getMonthlySalary() - monthlyExpenses);
 
         double affordabilityScore;
-        if (purchaseToIncome <= 0.10) {
+        if (purchaseToRemainingIncome <= 0.10) {
             affordabilityScore = 0.0; // okay
         }
-        else if (purchaseToIncome <= 0.20) {
+        else if (purchaseToRemainingIncome <= 0.20) {
             affordabilityScore = 0.2; // low risk
         }
-        else if (purchaseToIncome <= 0.35) {
+        else if (purchaseToRemainingIncome <= 0.35) {
             affordabilityScore = 0.5; // moderate
         }
-        else if (purchaseToIncome <= 0.50) {
+        else if (purchaseToRemainingIncome <= 0.50) {
             affordabilityScore = 0.7; // risky
         }
         else {
@@ -120,7 +120,6 @@ public class DecisionService {
                 + (debtScore           * 0.15)
                 + (goalImpactScore     * 0.10);
 
-        // convert to percentage
         double riskPercentage = riskScore * 100;
 
         // verdict
@@ -144,7 +143,7 @@ public class DecisionService {
                         "After this purchase you will have €%.2f remaining. " +
                         "Risk score: %.0f/100.",
                 emergencyMonths,
-                purchaseToIncome * 100,
+                purchaseToRemainingIncome * 100,
                 remainingAfter,
                 riskPercentage
         );
