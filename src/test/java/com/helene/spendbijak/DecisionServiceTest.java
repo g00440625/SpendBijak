@@ -60,6 +60,30 @@ class DecisionServiceTest {
     }
 
     @Test
+    void shouldReturnModerateRisk_whenSavingsAreAverageAndPurchaseIsReasonable() {
+        User user  = new User();
+        user.setMonthlySalary(3000);
+        user.setSavings(4000);
+
+        Expense expense = new Expense();
+        expense.setAmount(2000);
+
+        // fake repository responses
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(expenseRepository.findByUser_Id(1L)).thenReturn(List.of(expense));
+        Mockito.when(goalRepository.findByUser_Id(1L)).thenReturn(List.of());
+
+        // run the method
+        DecisionRequest request = new DecisionRequest();
+        request.setPurchaseAmount(500);
+        request.setCategory("entertainment");
+
+        DecisionResponse response = decisionService.getDecision(1L, request);
+
+        assertEquals("MODERATE", response.getVerdict());
+    }
+
+    @Test
     void shouldReturnHighRisk_whenExpensesAndPurchaseExceedIncome() {
         // set up fake data
         User user  = new User();
