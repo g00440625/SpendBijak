@@ -13,6 +13,7 @@ public class User {
 
     private String name;
     private String email;
+    private String password;
     private double monthlySalary;
     private double savings;
     private double monthlyBudget;
