@@ -1,6 +1,6 @@
 package com.helene.spendbijak.service;
 
-import com.helene.spendbijak.config.JWTUtil;
+import com.helene.spendbijak.config.JwtUtil;
 import com.helene.spendbijak.model.dto.AuthRequest;
 import com.helene.spendbijak.model.dto.AuthResponse;
 import com.helene.spendbijak.model.entity.User;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final JWTUtil jwtUtil;
+    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 

@@ -1,6 +1,6 @@
 package com.helene.spendbijak.controller;
 
-import com.helene.spendbijak.model.Expense;
+import com.helene.spendbijak.model.entity.Expense;
 import com.helene.spendbijak.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ public class ExpenseController {
         return expenseService.saveExpense(expense);
     }
 
-    @GetMapping
+    @GetMapping("/user/{userId}")
     public List<Expense> getExpenseByUser(@PathVariable Long userId) {
         return expenseService.getExpenseByUser(userId);
     }

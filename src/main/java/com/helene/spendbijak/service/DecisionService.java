@@ -1,5 +1,6 @@
 package com.helene.spendbijak.service;
 
+import com.helene.spendbijak.config.RiskWeights;
 import com.helene.spendbijak.model.dto.DecisionRequest;
 import com.helene.spendbijak.model.dto.DecisionResponse;
 import com.helene.spendbijak.model.entity.Expense;
@@ -37,7 +38,10 @@ public class DecisionService {
         // Calculate Score
         // emergency fund score
         double monthlyExpenses = totalSpent;
-        double emergencyMonths = user.getSavings() / monthlyExpenses;
+        double emergencyMonths = (monthlyExpenses > 0)
+                ? user.getSavings() / monthlyExpenses
+                : 6.0; // assume safe if no expenses yet
+
 
         double emergencyFundScore;
         if (emergencyMonths >=6) {
@@ -53,8 +57,12 @@ public class DecisionService {
             emergencyFundScore = 1; // dangerous
         }
 
+        double remainingIncome = user.getMonthlySalary() - monthlyExpenses;
+
         // affordability score based on 50/30/20 rule
-        double purchaseToRemainingIncome = request.getPurchaseAmount()/(user.getMonthlySalary() - monthlyExpenses);
+        double purchaseToRemainingIncome = (remainingIncome > 0)
+                ? request.getPurchaseAmount() / remainingIncome
+                : 1.0; // maximum risk if no income remaining
 
         double affordabilityScore;
         if (purchaseToRemainingIncome <= 0.10) {
@@ -87,7 +95,6 @@ public class DecisionService {
         } else {
             savingsRateScore = 1; // very low
         }
-        double debtScore = 0.0;
 
         // calculate goal impact score to requested purchase
         double goalImpactScore = 0.0;
@@ -114,13 +121,26 @@ public class DecisionService {
         }
 
         // full risk calculation
-        double riskScore = (emergencyFundScore  * 0.30)
-                + (affordabilityScore  * 0.25)
-                + (savingsRateScore    * 0.20)
-                + (debtScore           * 0.15)
-                + (goalImpactScore     * 0.10);
+        double riskScore = (emergencyFundScore  * RiskWeights.EMERGENCY_FUND_WEIGHT)
+                + (affordabilityScore  * RiskWeights.AFFORDABILITY_WEIGHT)
+                + (savingsRateScore    * RiskWeights.SAVINGS_WEIGHT)
+                + (goalImpactScore     * RiskWeights.GOALS_WEIGHT);
 
-        double riskPercentage = riskScore * 100;
+        // calculate only active weights
+        double activeWeights = 0;
+
+        activeWeights += RiskWeights.EMERGENCY_FUND_WEIGHT;
+        activeWeights += RiskWeights.AFFORDABILITY_WEIGHT;
+        activeWeights += RiskWeights.SAVINGS_WEIGHT;
+
+        boolean hasGoalData = !goal.isEmpty();
+
+        if (hasGoalData) {
+            activeWeights += RiskWeights.GOALS_WEIGHT;
+        }
+
+        double normalizedScore = riskScore / activeWeights;
+        double riskPercentage = normalizedScore * 100;
 
         // verdict
         String verdict;
@@ -130,7 +150,7 @@ public class DecisionService {
         else if (riskPercentage < 60) {
             verdict = "MODERATE";
         }
-        else                        {
+        else {
             verdict = "HIGH RISK";
         }
 
