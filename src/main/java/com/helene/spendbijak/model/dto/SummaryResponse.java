@@ -7,4 +7,6 @@ public class SummaryResponse {
     private double totalSpent;
     private double remaining;
     private double percentageUsed;
+    private double savings;
+    private double monthlyBudget;
 }

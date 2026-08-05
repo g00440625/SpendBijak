@@ -38,6 +38,8 @@ public class SummaryService {
         summary.setTotalSpent(totalSpent);
         summary.setRemaining(remaining);
         summary.setPercentageUsed(percentageUsed);
+        summary.setSavings(user.getSavings());
+        summary.setMonthlyBudget(user.getMonthlyBudget());
 
         return summary;
     }

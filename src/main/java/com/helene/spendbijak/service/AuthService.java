@@ -28,6 +28,7 @@ public class AuthService {
 
         // build response
         AuthResponse response = new AuthResponse();
+        response.setUserId(user.getId());
         response.setToken(token);
         response.setEmail(user.getEmail());
         return response;
@@ -48,6 +49,7 @@ public class AuthService {
 
         // build response
         AuthResponse response = new AuthResponse();
+        response.setUserId(user.getId());
         response.setToken(token);
         response.setEmail(user.getEmail());
         return response;
