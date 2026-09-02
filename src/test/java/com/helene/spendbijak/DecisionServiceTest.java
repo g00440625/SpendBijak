@@ -52,7 +52,7 @@ class DecisionServiceTest {
         // run the method
         DecisionRequest request = new DecisionRequest();
         request.setPurchaseAmount(100);
-        request.setCategory("entertainment");
+        request.setPurchaseCategory("entertainment");
 
         DecisionResponse response = decisionService.getDecision(1L, request);
 
@@ -76,7 +76,7 @@ class DecisionServiceTest {
         // run the method
         DecisionRequest request = new DecisionRequest();
         request.setPurchaseAmount(500);
-        request.setCategory("entertainment");
+        request.setPurchaseCategory("entertainment");
 
         DecisionResponse response = decisionService.getDecision(1L, request);
 
@@ -101,7 +101,7 @@ class DecisionServiceTest {
         // run the method
         DecisionRequest request = new DecisionRequest();
         request.setPurchaseAmount(300);
-        request.setCategory("entertainment");
+        request.setPurchaseCategory("entertainment");
 
         DecisionResponse response = decisionService.getDecision(1L, request);
 
