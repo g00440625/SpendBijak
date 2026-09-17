@@ -1,4 +1,4 @@
-# SpendBijak — AI-Powered Financial Advisor API
+# SpendBijak — Financial Advisor API
 
 > "Can I afford this?" — SpendBijak answers with a weighted risk score, not just a yes or no.
 
